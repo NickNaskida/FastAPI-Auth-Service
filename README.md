@@ -12,6 +12,12 @@
 
 FastAPI secure jwt ...
 
+## Features
+
+* [ ] Extensible base user model
+* [ ] Ready-to-use JWT secure authentication
+* [ ] ...
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
