@@ -12,6 +12,11 @@
 
 FastAPI secure jwt ...
 
+## TODO
+* [ ] Basic Auth (login, register, logout, refresh)
+* [ ] Reset Password
+* [ ] Email verification
+
 ## Features
 
 * [ ] Extensible base user model
