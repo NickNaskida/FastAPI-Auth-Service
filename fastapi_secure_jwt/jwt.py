@@ -1,3 +1,4 @@
+import uuid
 from time import time
 from typing import Dict, Any, Union
 
@@ -24,11 +25,35 @@ def generate_jwt_token(
         claims: Dict[str, Any] = None,
         headers: Dict[str, Any] = None,
 ) -> str:
-    """Generate a JWT token."""
+    """
+    Generate a JWT token.
+
+    :param identity:
+         The identity of this token. It can be any data that is json serializable.
+    :param token_type:
+        The type of the token. Can be 'access' or 'refresh'.
+    :param secret:
+        The secret key.
+    :param lifetime:
+        A value in seconds for how long this token should last before it
+        expires.
+    :param algorithm:
+        The algorithm to use.
+    :param claims:
+        Optional. Additional claims to include in the token. These claims are
+        merged into the default claims (exp, iat, etc)
+    :param headers:
+        Optional. Additional headers to include in the token. These headers
+        are merged into the default headers (alg, typ)
+
+    :return:
+        The encoded JWT token.
+    """
     current_time = int(time())
 
     payload = {
         "iat": current_time,
+        "jti": str(uuid.uuid4()),
         "sub": identity,
         "type": token_type,
         "nbf": current_time,
@@ -49,7 +74,19 @@ def decode_jwt_token(
         secret: SecretType,
         algorithm: str = JWT_ALGORITHM
 ) -> Dict[str, Any]:
-    """Decode a JWT token."""
+    """
+    Decode a JWT token.
+
+    :param jwt_token:
+        The JWT encoded token.
+    :param secret:
+        The secret key.
+    :param algorithm:
+        The algorithm to use. Defaults to 'HS256'.
+
+    :return:
+        The decoded token.
+    """
     return jwt.decode(
         jwt_token,
         _get_secret(secret),
