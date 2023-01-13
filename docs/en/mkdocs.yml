@@ -9,22 +9,26 @@ theme:
   palette:
   - media: '(prefers-color-scheme: light)'
     scheme: default
-    primary: teal
-    accent: amber
+    primary: cyan
+    accent: light green
     toggle:
       icon: material/lightbulb
       name: Switch to light mode
   - media: '(prefers-color-scheme: dark)'
     scheme: slate
-    primary: teal
-    accent: amber
+    primary: cyan
+    accent: light green
     toggle:
       icon: material/lightbulb-outline
       name: Switch to dark mode
   features:
-  - search.suggest
-  - search.highlight
-  - content.tabs.link
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - navigation.instant
+    - navigation.top
+    - navigation.sections
+    - content.code.annotate
   icon:
     repo: fontawesome/brands/github-alt
   logo: img/logo.svg
