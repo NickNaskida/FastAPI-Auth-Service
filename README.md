@@ -1,8 +1,8 @@
 <p align="center">
-  <a href=""><img src="./docs/img/logo.png" alt="FastAPI-allauth" width="85%"/></a>
+  <a href=""><img src="./img/logo.png" alt="FastAPI-allauth" width="95%"/></a>
 </p>
 <p align="center">
-    <em>⚡ Powerful and Secure Authentication tool for FastAPI ⚡</em>
+    <em>⚡ Powerful and Secure FastAPI Authentication Service ⚡</em>
 </p>
 <p align="center">
     
@@ -13,13 +13,14 @@
 FastAPI secure jwt ...
 
 ## TODO
+* [X] JWT token generation
 * [ ] Basic Auth (login, register, logout, refresh)
 * [ ] Reset Password
 * [ ] Email verification
 
 ## Features
 
-* [ ] Extensible base user model
+* [ ] User & Role Models
 * [ ] Ready-to-use JWT secure authentication
 * [ ] ...
 
@@ -36,14 +37,15 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## Contact
+
+[Nikoloz Naskidashvili](https://github.com/NickNaskida) - Twitter: [@NickNaskida](https://twitter.com/NickNaskida)
+
+Project Link: [https://github.com/NickNaskida/FastAPI-secure-jwt](https://github.com/NickNaskida/FastAPI-secure-jwt)
 
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## Contact
 
-[Nikoloz Naskidashvili](https://github.com/NickNaskida) - [@NickNaskida](https://twitter.com/NickNaskida)
-
-Project Link: [https://github.com/NickNaskida/FastAPI-secure-jwt](https://github.com/NickNaskida/FastAPI-secure-jwt)
 
