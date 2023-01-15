@@ -1,0 +1,28 @@
+# Everything the developer needs in addition to the production requirements
+-r prod.txt
+
+# Testing
+pytest==7.1.2
+WebTest==3.0.0
+factory-boy==3.2.1
+pdbpp==0.10.3
+
+# Lint and code style
+mypy
+black==22.6.0
+flake8==5.0.4
+flake8-blind-except==0.2.1
+flake8-debugger==4.1.2
+flake8-docstrings==1.6.0
+flake8-isort==4.2.0
+
+# fix dep
+pyreadline>=2.1
+isort==5.10.1
+pep8-naming==0.13.2
+
+# venv management
+tox==3.25.1
+
+# mypy
+sqlalchemy2-stubs==0.0.2a25

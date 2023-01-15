@@ -154,3 +154,7 @@ cython_debug/
 
 # Pycharm stuff
 .idea/
+
+# SQLite3 stuff
+*.sqlite3
+*.db
