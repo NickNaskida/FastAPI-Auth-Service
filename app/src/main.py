@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 
-from app.src.api.api_v1.api import api_router
-from app.src.core.config import settings
+from src.api.api_v1.api import api_router
+from src.core.config import settings
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

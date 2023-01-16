@@ -15,17 +15,7 @@ class DevelopmentSettings(BaseSettings):
 
     PROJECT_NAME: str
     PROJECT_VERSION: str
-    SQLALCHEMY_DATABASE_URI: str
 
-    class Config:
-        env_file = os.path.join(BASE_DIR, 'envs/.env')
-
-
-class TestSettings(DevelopmentSettings):
-    ...
-
-
-class ProductionSettings(DevelopmentSettings):
     POSTGRES_SERVER: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
@@ -45,6 +35,15 @@ class ProductionSettings(DevelopmentSettings):
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
 
+    class Config:
+        env_file = os.path.join(BASE_DIR, 'envs/.env')
+
+
+class TestSettings(DevelopmentSettings):
+    ...
+
+
+class ProductionSettings(DevelopmentSettings):
     SQLALCHEMY_POOL_SIZE: int = 20
     SQLALCHEMY_POOL_RECYCLE: int = 1200
     SQLALCHEMY_POOL_TIMEOUT: int = 5

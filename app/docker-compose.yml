@@ -4,11 +4,11 @@ services:
   app:
     container_name: app
     build:
-      context: ./app
+      context: .
       dockerfile: docker/Dockerfile
     restart: always
     env_file:
-      - src/envs/.env
+      - envs/.env
     ports:
       - "8000:8000"
     depends_on:
@@ -22,7 +22,7 @@ services:
     image: postgres:14.4-alpine
     restart: always
     env_file:
-      - src/envs/.env
+      - envs/.env
     ports:
       - "5432:5432"
     volumes:

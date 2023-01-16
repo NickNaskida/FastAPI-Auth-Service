@@ -2,7 +2,7 @@ FROM python:3.9.13-alpine
 
 MAINTAINER Nikoloz Naskidashvili <nikoloz2005@gmail.com>
 
-WORKDIR /code
+WORKDIR ./code
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
