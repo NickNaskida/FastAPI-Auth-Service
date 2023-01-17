@@ -1,4 +1,13 @@
+# FastAPI stuff
 fastapi==0.89.1
 uvicorn==0.20.0
 pydantic==1.10.4
+
+# Database stuff
+SQLAlchemy==1.4.46
+sqlmodel==0.0.8
+alembic==1.9.2
+asyncpg==0.27.0
+
+# Env
 python-dotenv==0.21.0

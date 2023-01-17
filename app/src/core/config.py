@@ -23,6 +23,11 @@ class DevelopmentSettings(BaseSettings):
     POSTGRES_PORT: str = str(5432)
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
+    SQLALCHEMY_POOL_SIZE: int = 20
+    SQLALCHEMY_POOL_RECYCLE: int = 1200
+    SQLALCHEMY_POOL_TIMEOUT: int = 5
+    SQLALCHEMY_MAX_OVERFLOW: int = 10
+
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
@@ -44,19 +49,6 @@ class TestSettings(DevelopmentSettings):
 
 
 class ProductionSettings(DevelopmentSettings):
-    SQLALCHEMY_POOL_SIZE: int = 20
-    SQLALCHEMY_POOL_RECYCLE: int = 1200
-    SQLALCHEMY_POOL_TIMEOUT: int = 5
-    SQLALCHEMY_MAX_OVERFLOW: int = 10
-
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        "pool_pre_ping": True,
-        "pool_reset_on_return": 'commit',  # looks like postgres likes this more than rollback
-        'pool_size': SQLALCHEMY_POOL_SIZE,
-        'pool_recycle': SQLALCHEMY_POOL_RECYCLE,
-        'pool_timeout': SQLALCHEMY_POOL_TIMEOUT,
-        'max_overflow': SQLALCHEMY_MAX_OVERFLOW,
-    }
 
     class Config:
         env_file = os.path.join(BASE_DIR, 'envs/.env.prod')
