@@ -8,6 +8,13 @@ SQLAlchemy==1.4.46
 sqlmodel==0.0.8
 alembic==1.9.2
 asyncpg==0.27.0
+aioredis==2.0.1
 
 # Env
 python-dotenv==0.21.0
+
+# JWT
+pyjwt==2.6.0
+
+# etc
+email-validator==1.3.0
