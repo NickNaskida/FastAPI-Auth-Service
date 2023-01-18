@@ -8,7 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from alembic import context
 
 from src.core.config import settings
-from src.db.base_class import Base
+from src.db.base_class import BaseModel
+
 from src.models import *  # necessarily to import something from file where your models are stored
 
 # this is the Alembic Config object, which provides
@@ -20,7 +21,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = Base.metadata
+target_metadata = BaseModel.metadata
 
 target_metadata.naming_convention = {
    "ix": "ix_%(column_0_label)s",
