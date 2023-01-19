@@ -1,5 +1,7 @@
 from typing import Optional, Any
 
+from passlib.hash import pbkdf2_sha256
+
 from src.core.config import settings
 from src.utils.jwt import generate_jwt_token
 
@@ -36,3 +38,11 @@ def create_refresh_token(
         claims=claims,
         headers=headers
     )
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pbkdf2_sha256.verify(plain_password, hashed_password)
+
+
+def hash_password(password: str) -> str:
+    return pbkdf2_sha256.hash(password)

@@ -17,11 +17,14 @@ The FastAPI Authentication microservice is an independently deployable component
 * [ ] Basic Auth (login, register, logout, refresh)
 * [ ] Reset Password
 * [ ] Email verification
+* [ ] User session info api endpoints (all sessions, device info ...) (like in Google and Facebook apps)
+* [ ] Add session abort for user (logout from certain session)
 
 ## Features
 
 * [ ] User & Role Models
 * [ ] Ready-to-use JWT secure authentication
+* [ ] User session management, session abort ...
 * [ ] ...
 
 ## Contributing

@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from alembic import context
 
 from src.core.config import settings
-from src.db.base_class import BaseModel
+from src.db.base_class import Base
 
 from src.models import *  # necessarily to import something from file where your models are stored
 
@@ -21,7 +21,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = BaseModel.metadata
+target_metadata = Base.metadata
 
 target_metadata.naming_convention = {
    "ix": "ix_%(column_0_label)s",
@@ -39,13 +39,13 @@ target_metadata.naming_convention = {
 
 
 def get_sqlalchemy_url() -> str:
-    user = settings.POSTGRES_USER
-    password = settings.POSTGRES_PASSWORD
-    server = settings.POSTGRES_SERVER
-    db = settings.POSTGRES_DB
-    port = settings.POSTGRES_PORT
+    p_user = settings.POSTGRES_USER
+    p_password = settings.POSTGRES_PASSWORD
+    p_server = settings.POSTGRES_SERVER
+    p_db = settings.POSTGRES_DB
+    p_port = settings.POSTGRES_PORT
 
-    return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
+    return f"postgresql+asyncpg://{p_user}:{p_password}@{p_server}:{p_port}/{p_db}"
 
 
 def run_migrations_offline() -> None:

@@ -13,6 +13,7 @@ app = FastAPI(
 
 @app.get("/", tags=["status"])
 def health_check():
+    """Health check endpoint"""
     return {
         "status": "ok",
         "title": settings.PROJECT_NAME,
