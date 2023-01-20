@@ -17,6 +17,7 @@ class DevelopmentSettings(BaseSettings):
     PROJECT_VERSION: str
 
     # JWT
+    JWT_SECRET_KEY: str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE: int = 60 * 15
     REFRESH_TOKEN_EXPIRE: int = 60 * 60 * 24 * 30
 
