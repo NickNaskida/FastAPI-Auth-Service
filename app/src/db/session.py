@@ -10,6 +10,7 @@ async_engine = create_async_engine(
     echo=True,
     future=True,
     pool_size=settings.SQLALCHEMY_POOL_SIZE,
+    max_overflow=settings.SQLALCHEMY_MAX_OVERFLOW,
 )
 
 # TODO: configure setting to postgres db (pool_size, pool_recycle, pool_timeout ...)
