@@ -1,8 +1,13 @@
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
+from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from sqlalchemy import exc
+from fastapi_async_sqlalchemy import db
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 
 from src.db.base_class import Base
 
@@ -21,53 +26,70 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def list_all(self, db: Session) -> List[ModelType]:
-        return db.query(self.model).all()
+    async def get(self, id: Any, db_session: Optional[AsyncSession]) -> Optional[ModelType]:
+        db_session = db_session or db.session
+        query = select(self.model).where(self.model.id == id)
+        response = await db_session.execute(query)
+        return response.scalar_one_or_none()
 
-    def get(self, db: Session, id: Any) -> Optional[ModelType]:
-        return db.query(self.model).filter(self.model.id == id).first()
-
-    def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 100
+    async def get_multi(
+        self, *, skip: int = 0, limit: int = 100, db_session: Optional[AsyncSession]
     ) -> List[ModelType]:
-        return db.query(self.model).offset(skip).limit(limit).all()
+        db_session = db_session or db.session
+        query = select(self.model).offset(skip).limit(limit).order_by(self.model.id)
+        response = await db_session.execute(query)
+        return response.scalars().all()
 
-    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
-        obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data)  # type: ignore
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
+    async def create(self, *, obj_in: CreateSchemaType, db_session: Optional[AsyncSession]) -> ModelType:
+        db_session = db_session or db.session
+        db_obj = self.model.from_orm(obj_in)  # type: ignore
+
+        try:
+            db_session.add(db_obj)
+            await db_session.commit()
+        except exc.IntegrityError:
+            await db_session.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="Resource already exists",
+            )
+        await db_session.refresh(db_obj)
 
         return db_obj
 
-    def update(
+    async def update(
         self,
-        db: Session,
         *,
         db_obj: ModelType,
-        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+        obj_in: Union[UpdateSchemaType, Dict[str, Any]],
+        db_session: Optional[AsyncSession] = None
     ) -> ModelType:
+        db_session = db_session or db.session
         obj_data = jsonable_encoder(db_obj)
 
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.dict(exclude_unset=True)
-
+            update_data = obj_in.dict(
+                exclude_unset=True
+            )  # This tells Pydantic to not include the values that were not sent
         for field in obj_data:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
 
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
+        db_session.add(db_obj)
+        await db_session.commit()
+        await db_session.refresh(db_obj)
 
         return db_obj
 
-    def remove(self, db: Session, *, id: int) -> ModelType:
-        obj = db.query(self.model).get(id)
-        db.delete(obj)
-        db.commit()
+    async def remove(self, *, id: int, db_session: Optional[AsyncSession] = None) -> ModelType:
+        db_session = db_session or db.session
+        response = await db_session.execute(
+            select(self.model).where(self.model.id == id)
+        )
+        obj = response.scalar_one()
+        await db_session.delete(obj)
+        await db_session.commit()
 
         return obj

@@ -19,3 +19,7 @@ class UserCreate(UserBase):
     last_name: str
     email: EmailStr
     password: str
+
+
+class UserUpdate(UserBase):
+    pass
