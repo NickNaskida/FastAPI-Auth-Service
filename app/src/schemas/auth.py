@@ -5,7 +5,6 @@ from pydantic import BaseModel, EmailStr
 
 class AuthPayload(BaseModel):
     fingerprint: str
-    user_agent: str
 
 
 class LoginPayload(AuthPayload):

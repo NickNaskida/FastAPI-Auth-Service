@@ -10,5 +10,5 @@ redis_password = settings.REDIS_PASSWORD
 
 
 async def get_redis_client() -> Redis:
-    redis = await aioredis.from_url("redis://localhost",  db=redis_db, password=redis_password, username=redis_username)
+    redis = aioredis.from_url("redis://localhost",  db=redis_db)
     return redis
