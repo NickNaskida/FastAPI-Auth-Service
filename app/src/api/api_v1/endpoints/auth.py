@@ -5,7 +5,7 @@ from aioredis import Redis
 from src import crud
 from src.schemas.token import Token
 from src.utils.token import add_refresh_token_to_redis
-from src.schemas.auth import RegisterPayload
+from src.schemas.auth import LoginPayload, RegisterPayload
 from src.schemas.response import IPostResponseBase, create_response
 from src.core.security import create_access_token, create_refresh_token
 from src.db.redis import get_redis_client
@@ -14,18 +14,54 @@ from src.db.redis import get_redis_client
 router = APIRouter()
 
 # TODO: Reverse proxy header setup (ip, user-agent, etc)
+# TODO: Redis token management
 
 
 @router.post('/login')
-async def login(request: Request):
+async def login(
+    request: LoginPayload,
+    redis_client: Redis = Depends(get_redis_client)
+) -> IPostResponseBase[Token]:
     """Login user and create JWT access and refresh tokens"""
-    pass
+
+    # Get and check required headers
+    # forwarded_for = context.data.get('X-Forwarded-For')   TODO: Figure out why this returns None
+    forwarded_for = '000.000.00.00'
+    user_agent = context.data.get('User-Agent')
+
+    if not forwarded_for:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Missing X-Forwarded-For header')
+    elif not user_agent:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Missing User-Agent header')
+
+    # Authenticate user
+    user = await crud.user.authenticate(email_or_username=request.email_or_username, password=request.password)
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Incorrect username, email or password')
+    elif not user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Inactive user')
+
+    # Create tokens
+    access_token = create_access_token(user.username)
+    refresh_token = create_refresh_token(user.username)
+
+    # Store refresh token and other metadata in redis
+    await add_refresh_token_to_redis(redis_client, user, refresh_token, forwarded_for, user_agent, request.fingerprint)
+
+    data = Token(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        token_type="bearer"
+    )
+
+    return create_response(data=data, message="User logged in successfully")
 
 
 @router.post('/register')
 async def register(
     request: RegisterPayload,
-    redis_client: Redis = Depends(get_redis_client),
+    redis_client: Redis = Depends(get_redis_client)
 ) -> IPostResponseBase[Token]:
     """Register user and create JWT access and refresh tokens"""
 

@@ -30,7 +30,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
         if not user:
             return None
-        if not verify_password(password, user.hashed_password):
+        if not verify_password(password, user.password):
             return None
 
         return user
