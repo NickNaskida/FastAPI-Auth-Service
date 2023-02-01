@@ -5,7 +5,7 @@
     <em>⚡ Powerful and Secure FastAPI Authentication Service ⚡</em>
 </p>
 <p align="center">
-    
+    🚧 Currently in development 🚧
 </p>
 
 ---
