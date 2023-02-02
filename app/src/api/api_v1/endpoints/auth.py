@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException, Request, Depends, status
-from starlette_context import context
 from aioredis import Redis
 
 from src import crud
 from src.schemas.token import Token
+from src.utils.headers import get_auth_headers
 from src.utils.token import add_refresh_token_to_redis
-from src.schemas.auth import LoginPayload, RegisterPayload
+from src.schemas.auth import LoginPayload, RegisterPayload, RefreshPayload
 from src.schemas.response import IPostResponseBase, create_response
 from src.core.security import create_access_token, create_refresh_token
 from src.db.redis import get_redis_client
@@ -13,7 +13,6 @@ from src.db.redis import get_redis_client
 
 router = APIRouter()
 
-# TODO: Reverse proxy header setup (ip, user-agent, etc)
 # TODO: Redis token management
 
 
@@ -25,14 +24,7 @@ async def login(
     """Login user and create JWT access and refresh tokens"""
 
     # Get and check required headers
-    # forwarded_for = context.data.get('X-Forwarded-For')   TODO: Figure out why this returns None
-    forwarded_for = '000.000.00.00'
-    user_agent = context.data.get('User-Agent')
-
-    if not forwarded_for:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Missing X-Forwarded-For header')
-    elif not user_agent:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Missing User-Agent header')
+    forwarded_for, user_agent = get_auth_headers()
 
     # Authenticate user
     user = await crud.user.authenticate(email_or_username=request.email_or_username, password=request.password)
@@ -66,14 +58,7 @@ async def register(
     """Register user and create JWT access and refresh tokens"""
 
     # Get and check required headers
-    # forwarded_for = context.data.get('X-Forwarded-For')   TODO: Figure out why this returns None
-    forwarded_for = '000.000.00.00'
-    user_agent = context.data.get('User-Agent')
-
-    if not forwarded_for:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Missing X-Forwarded-For header')
-    elif not user_agent:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Missing User-Agent header')
+    forwarded_for, user_agent = get_auth_headers()
 
     # Validate username and email are unique
     user_exists = await crud.user.email_or_username_exists(email=request.email, username=request.username)
@@ -99,13 +84,20 @@ async def register(
     return create_response(data=data, message="User registered successfully")
 
 
-@router.post('/logout')
-async def logout(request: Request):
-    """Logout user and revoke JWT access and refresh tokens"""
+@router.post('/refresh')
+async def refresh(
+    request: RefreshPayload,
+    redis_client: Redis = Depends(get_redis_client)
+) -> IPostResponseBase[Token]:
+    """Refresh JWT access and refresh tokens"""
+
+    # Get and check required headers
+    forwarded_for, user_agent = get_auth_headers()
+
     pass
 
 
-@router.post('/refresh')
-async def refresh(request: Request):
-    """Refresh JWT access and refresh tokens"""
+@router.post('/logout')
+async def logout(request: Request):
+    """Logout user and revoke JWT access and refresh tokens"""
     pass

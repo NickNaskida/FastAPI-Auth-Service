@@ -1,8 +1,8 @@
-"""add user model
+"""Initial commit
 
-Revision ID: 6a4a9d5888f0
+Revision ID: 70ff3588ef0a
 Revises: 
-Create Date: 2023-01-18 20:53:44.328658
+Create Date: 2023-02-01 14:02:25.486710
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision = '6a4a9d5888f0'
+revision = '70ff3588ef0a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +25,7 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(length=25), nullable=True),
     sa.Column('last_name', sa.String(length=80), nullable=True),
     sa.Column('email', sa.String(), nullable=True),
-    sa.Column('password', sa.String(), nullable=False),
+    sa.Column('password', sa.String(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )

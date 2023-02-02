@@ -21,13 +21,13 @@ def _get_secret(secret: SecretType) -> SecretType:
 
 
 def generate_jwt_token(
-        identity: str,
-        token_type: str,
-        lifetime: int,
-        secret: SecretType = jwt_secret_key,
-        algorithm: str = JWT_ALGORITHM,
-        claims: Dict[str, Any] = None,
-        headers: Dict[str, Any] = None,
+    identity: str,
+    token_type: str,
+    lifetime: int,
+    secret: SecretType = jwt_secret_key,
+    algorithm: str = JWT_ALGORITHM,
+    claims: Dict[str, Any] = None,
+    headers: Dict[str, Any] = None,
 ) -> str:
     """
     Generate a JWT token.
@@ -74,9 +74,9 @@ def generate_jwt_token(
 
 
 def decode_jwt_token(
-        jwt_token: str,
-        secret: SecretType = jwt_secret_key,
-        algorithm: str = JWT_ALGORITHM
+    jwt_token: str,
+    secret: SecretType = jwt_secret_key,
+    algorithm: str = JWT_ALGORITHM
 ) -> Dict[str, Any]:
     """
     Decode a JWT token.
@@ -96,3 +96,8 @@ def decode_jwt_token(
         _get_secret(secret),
         algorithms=[algorithm]
     )
+
+
+def get_jwt_identity(jwt_token: str) -> str:
+    decoded_token = decode_jwt_token(jwt_token)
+    return decoded_token.get("sub")

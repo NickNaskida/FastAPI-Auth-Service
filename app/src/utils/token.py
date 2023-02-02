@@ -1,4 +1,3 @@
-import uuid
 from typing import Optional
 
 from aioredis import Redis
@@ -27,13 +26,10 @@ async def add_refresh_token_to_redis(
     :return: None
     """
     decoded_token = decode_jwt_token(refresh_token)
-
-    # Generate a unique session ID
-    session_id = uuid.uuid4().hex
+    session_id = decoded_token["jti"]
 
     mapping = {
-        'session_id': session_id,
-        "refresh_token": refresh_token,
+        "refresh_token_id": session_id,
         "ip": ip,
         "user_agent": user_agent,
         "fingerprint": fingerprint,

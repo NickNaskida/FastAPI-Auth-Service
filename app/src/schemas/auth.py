@@ -20,3 +20,7 @@ class RegisterPayload(AuthPayload):
     password: str
 
 
+class RefreshPayload(BaseModel):
+    refresh_token: str
+
+
