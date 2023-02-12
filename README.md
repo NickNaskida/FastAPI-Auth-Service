@@ -10,8 +10,6 @@
 
 ---
 
-The FastAPI Authentication microservice is an independently deployable component intended for handling user authentication.
-
 ## TODO
 * [X] JWT token generation
 * [ ] Basic Auth (login, register, logout, refresh)
