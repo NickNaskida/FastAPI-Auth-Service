@@ -5,10 +5,11 @@
     <em>⚡ Powerful and Secure FastAPI Authentication Service ⚡</em>
 </p>
 <p align="center">
-    🚧 Currently in development 🚧
+    ⚠️ DEPRECATED ⚠️
 </p>
 
----
+
+# DEPRECATED: DON'T USE JWT FOR LOGIN - [STOP USING JWT](https://gist.github.com/samsch/0d1f3d3b4745d778f78b230cf6061452)
 
 ## TODO
 * [X] JWT token generation
